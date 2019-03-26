@@ -1,0 +1,42 @@
+matrix:
+  include:
+    - language: go
+      go:
+        - 1.12
+      env:
+        - GO111MODULE=on
+      before_install:
+        - sudo add-apt-repository ppa:dluxen/flatbuffers -y
+        - sudo apt-get update -q
+        - sudo apt-get install flatbuffers -y
+        - curl -sL https://deb.nodesource.com/setup_11.x | sudo -E bash -
+        - sudo apt-get install nodejs -y
+        - npm install
+        - npm run clean
+        - npm run build:go
+        - npm run clean:gendir
+      before_script:
+        - curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | bash -s -- -b $GOPATH/bin v1.15.0
+      script:
+        - npm run test:go:prod
+    - language: node_js
+      node_js:
+        - 11
+      before_install:
+        - sudo add-apt-repository ppa:dluxen/flatbuffers -y
+        - sudo apt-get update -q
+        - sudo apt-get install flatbuffers -y
+        - npm install
+        - npm run clean
+        - npm run build:ts
+        - npm run clean:gendir
+      script:
+        - npm run test:ts:prod
+after_success:
+  - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
+  - chmod +x send.sh
+  - ./send.sh success https://discordapp.com/api/webhooks/555254106974060545/yPx-St26M5J3Pwi5PMWLM-JGsxHBxCaccf56GR5i8ipqZ6bA4Jyyu5fut4UXBToim15h
+after_failure:
+  - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
+  - chmod +x send.sh
+  - ./send.sh failure https://discordapp.com/api/webhooks/555254106974060545/yPx-St26M5J3Pwi5PMWLM-JGsxHBxCaccf56GR5i8ipqZ6bA4Jyyu5fut4UXBToim15h
