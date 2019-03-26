@@ -4,11 +4,16 @@ import (
 	"sync"
 )
 
+// BehaviorObservable represents an object that can emit a set of values over a
+// period of time. This object is a special case as opposed to simple observable
+// differs in that it emits the last value emitted to new subscribers upon
+// subscription.
 type BehaviorObservable struct {
 	baseObservable
 	currentValue interface{}
 }
 
+// NewBehaviorObservable creates new behavior observable.
 func NewBehaviorObservable(source Observable, initialValue interface{}) Observable {
 	observable := BehaviorObservable{
 		baseObservable: baseObservable{
@@ -17,6 +22,7 @@ func NewBehaviorObservable(source Observable, initialValue interface{}) Observab
 			register:   make(chan chan<- interface{}),
 			unregister: make(chan chan<- interface{}),
 			outputs:    make(map[chan<- interface{}]*outputMetadata),
+			mutex:      &sync.RWMutex{},
 		},
 		currentValue: initialValue,
 	}
@@ -24,6 +30,7 @@ func NewBehaviorObservable(source Observable, initialValue interface{}) Observab
 	return observable
 }
 
+// Subscribe registers Observer handlers for notifications it will emit.
 func (o BehaviorObservable) Subscribe(handlers ...EventHandler) *Subscription {
 	sub := o.subscribe(true, handlers...)
 
@@ -36,6 +43,7 @@ func (o BehaviorObservable) Subscribe(handlers ...EventHandler) *Subscription {
 	return sub
 }
 
+// Pipe is used to stitch together functional operators into a chain.
 func (o BehaviorObservable) Pipe(operations ...OperatorFunction) Observable {
 	var observable Observable = o
 	for _, operation := range operations {
@@ -44,6 +52,8 @@ func (o BehaviorObservable) Pipe(operations ...OperatorFunction) Observable {
 	return observable
 }
 
+// ToPromise returns a awaitable channel which closes after receiving one
+// notification.
 func (o BehaviorObservable) ToPromise() func() chan interface{} {
 	channel := make(chan interface{})
 	sub := o.Subscribe(
@@ -87,6 +97,9 @@ func (o BehaviorObservable) ToPromise() func() chan interface{} {
 	}
 }
 
+// SetCurrentValue sets the current value of the observable which will be
+// emitted to the next subscriber. This value mostly adjusts automatically
+// based on the last emitted value.
 func (o *BehaviorObservable) SetCurrentValue(value interface{}) {
 	o.currentValue = value
 }

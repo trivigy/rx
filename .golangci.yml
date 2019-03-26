@@ -18,6 +18,7 @@ linters:
     - deadcode
     - unused
     - errcheck
+    - dupl
 
 issues:
   exclude-use-default: false

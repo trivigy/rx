@@ -1,7 +1,11 @@
 package rx
 
+// OperatorFunction represents an interface for satisfying an operator
+// function signature.
 type OperatorFunction func(Observable) Observable
 
+// Filter filters items emitted by the source Observable by only emitting those
+// that satisfy a specified predicate.
 func Filter(fn func(interface{}) bool) OperatorFunction {
 	return func(observable Observable) Observable {
 		switch observable := observable.(type) {
@@ -62,6 +66,7 @@ func Filter(fn func(interface{}) bool) OperatorFunction {
 	}
 }
 
+// Take emits only the first `num` values emitted by the source Observable.
 func Take(num interface{}) OperatorFunction {
 	return func(observable Observable) Observable {
 		counter := num.(int)

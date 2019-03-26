@@ -4,10 +4,13 @@ import (
 	"sync"
 )
 
+// SimpleObservable represents an object that can emit a set of values over a
+// period of time.
 type SimpleObservable struct {
 	baseObservable
 }
 
+// NewSimpleObservable creates new simple observable.
 func NewSimpleObservable(source Observable) Observable {
 	observable := SimpleObservable{
 		baseObservable: baseObservable{
@@ -16,12 +19,14 @@ func NewSimpleObservable(source Observable) Observable {
 			register:   make(chan chan<- interface{}),
 			unregister: make(chan chan<- interface{}),
 			outputs:    make(map[chan<- interface{}]*outputMetadata),
+			mutex:      &sync.RWMutex{},
 		},
 	}
 	go observable.run()
 	return observable
 }
 
+// Subscribe registers Observer handlers for notifications it will emit.
 func (o SimpleObservable) Subscribe(handlers ...EventHandler) *Subscription {
 	return o.subscribe(true, handlers...)
 }

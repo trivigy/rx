@@ -18,7 +18,7 @@ type baseObservable struct {
 	register   chan chan<- interface{}
 	unregister chan chan<- interface{}
 	outputs    map[chan<- interface{}]*outputMetadata
-	mutex      sync.RWMutex
+	mutex      *sync.RWMutex
 }
 
 func (o *baseObservable) push(event interface{}, ch chan<- interface{}, seq uint64) {
@@ -39,7 +39,7 @@ func (o *baseObservable) push(event interface{}, ch chan<- interface{}, seq uint
 		if err := recover(); err != nil {
 			fmt.Printf("%#v\n", err)
 		}
-		meta.done += 1
+		meta.done++
 	}()
 	ch <- event
 }
@@ -52,7 +52,7 @@ func (o *baseObservable) run() {
 				o.mutex.RLock()
 				for ch, meta := range o.outputs {
 					go o.push(event, ch, meta.seq)
-					meta.seq += 1
+					meta.seq++
 				}
 				o.mutex.RUnlock()
 			} else {

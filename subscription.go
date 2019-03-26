@@ -20,6 +20,8 @@ type Subscription struct {
 	Error         error
 }
 
+// NewSubscription creates a new subscription and attaches handler functions to
+// the specified observable.
 func NewSubscription(observable baseObservable, leaf bool, handlers ...EventHandler) *Subscription {
 	sub := &Subscription{
 		leaf:       leaf,

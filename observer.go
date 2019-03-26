@@ -25,8 +25,8 @@ func (ob Observer) Handle(item interface{}) {
 	}
 }
 
-// New constructs a new Observer instance with default Observer and accept
-// any number of EventHandler
+// NewObserver constructs a new Observer instance with default Observer and
+// accept any number of EventHandler.
 func NewObserver(handlers ...EventHandler) Observer {
 	ob := DefaultObserver
 	if len(handlers) > 0 {
