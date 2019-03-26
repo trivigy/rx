@@ -26,6 +26,7 @@ func (o SimpleObservable) Subscribe(handlers ...EventHandler) *Subscription {
 	return o.subscribe(true, handlers...)
 }
 
+// Pipe is used to stitch together functional operators into a chain.
 func (o SimpleObservable) Pipe(operations ...OperatorFunction) Observable {
 	var observable Observable = o
 	for _, operation := range operations {
@@ -34,6 +35,8 @@ func (o SimpleObservable) Pipe(operations ...OperatorFunction) Observable {
 	return observable
 }
 
+// ToPromise returns a awaitable channel which closes after receiving one
+// notification.
 func (o SimpleObservable) ToPromise() func() chan interface{} {
 	channel := make(chan interface{})
 	sub := o.Subscribe(

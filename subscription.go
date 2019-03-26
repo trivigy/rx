@@ -61,7 +61,6 @@ func NewSubscription(observable baseObservable, leaf bool, handlers ...EventHand
 		if sub.Error == nil {
 			sub.observer.Complete()
 		}
-		return
 	}()
 
 	wg.Wait()

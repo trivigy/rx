@@ -7,6 +7,6 @@ type unsubscribed struct{}
 type closed struct{}
 
 type message struct {
-	ch chan<- interface{}
+	ch   chan<- interface{}
 	data interface{}
 }

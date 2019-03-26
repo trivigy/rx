@@ -17,4 +17,4 @@ and to withstand thread safety of execution. In addition the interface was
 constructed to resemble the way rxjs 6+ works. The purpose of this library is 
 to support identical interface for both [gate](https://github.com/syncaide/gate) 
 and [chiral](https://github.com/syncaide/chiral). The RxGo contributors 
-have done an outstanding work and certainly deserve the credit for it.
+have done an outstanding work and certainly deserve the credit.
