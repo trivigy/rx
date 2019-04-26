@@ -1,11 +1,13 @@
 # Rx
-
-[![Discord](https://img.shields.io/discord/428990244952735764.svg?style=flat&logo=discord&colorB=green)](https://discord.gg/M9nxJ3g)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE.md)
 ![GitHub tag (latest SemVer)](https://img.shields.io/github/tag/syncaide/rx.svg?color=e36397&label=release)
 
-### Examples
-I will write up a few examples really soon.
+### NOTICE
+This library is not maintained. It works and all of its tests pass. You can look 
+at examples of how to use the library through the `*_test.go` files, but I no 
+longer develop or maintain it. It was an experimental attempt at improving 
+public interfaces for a dependant library but I unfortunately it did not work out.
+It is kept here only for reference.
 
 ### Disclosure
 This library is a very similar implementation to the 
